@@ -135,12 +135,13 @@ impl Thread {
         }
     }
     #[cfg(any(target_env = "newlib",
+              target_os = "gnu",
               target_os = "solaris",
               target_os = "haiku",
               target_os = "l4re",
               target_os = "emscripten"))]
     pub fn set_name(_name: &CStr) {
-        // Newlib, Illumos, Haiku, and Emscripten have no way to set a thread name.
+        // Newlib, Hurd, Illumos, Haiku, and Emscripten have no way to set a thread name.
     }
     #[cfg(target_os = "fuchsia")]
     pub fn set_name(_name: &CStr) {
@@ -232,7 +233,7 @@ pub mod guard {
         current().map(|s| s as *mut libc::c_void)
     }
 
-    #[cfg(any(target_os = "android", target_os = "freebsd",
+    #[cfg(any(target_os = "android", target_os = "freebsd", target_os = "gnu",
               target_os = "linux", target_os = "netbsd", target_os = "l4re"))]
     unsafe fn get_stack_start() -> Option<*mut libc::c_void> {
         let mut ret = None;
@@ -331,7 +332,7 @@ pub mod guard {
         })
     }
 
-    #[cfg(any(target_os = "android", target_os = "freebsd",
+    #[cfg(any(target_os = "android", target_os = "freebsd", target_os = "gnu",
               target_os = "linux", target_os = "netbsd", target_os = "l4re"))]
     pub unsafe fn current() -> Option<usize> {
         let mut ret = None;

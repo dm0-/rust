@@ -39,6 +39,7 @@ static ENV_LOCK: Mutex = Mutex::new();
 extern {
     #[cfg(not(target_os = "dragonfly"))]
     #[cfg_attr(any(target_os = "linux",
+                   target_os = "gnu",
                    target_os = "emscripten",
                    target_os = "fuchsia",
                    target_os = "l4re"),
@@ -281,7 +282,7 @@ pub fn current_exe() -> io::Result<PathBuf> {
     }
 }
 
-#[cfg(any(target_os = "linux", target_os = "android", target_os = "emscripten"))]
+#[cfg(any(target_os = "linux", target_os = "gnu", target_os = "android", target_os = "emscripten"))]
 pub fn current_exe() -> io::Result<PathBuf> {
     let selfexe = PathBuf::from("/proc/self/exe");
     if selfexe.exists() {

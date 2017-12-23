@@ -1201,6 +1201,7 @@ fn get_concurrency() -> usize {
     }
 
     #[cfg(any(target_os = "linux",
+              target_os = "gnu",
               target_os = "macos",
               target_os = "ios",
               target_os = "android",

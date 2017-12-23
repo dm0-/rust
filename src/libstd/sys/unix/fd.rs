@@ -83,9 +83,9 @@ impl FileDesc {
         unsafe fn cvt_pread64(fd: c_int, buf: *mut c_void, count: usize, offset: i64)
             -> io::Result<isize>
         {
-            #[cfg(target_os = "linux")]
+            #[cfg(any(target_os = "linux", target_os = "gnu"))]
             use libc::pread64;
-            #[cfg(not(target_os = "linux"))]
+            #[cfg(not(any(target_os = "linux", target_os = "gnu")))]
             use libc::pread as pread64;
             cvt(pread64(fd, buf, count, offset))
         }
@@ -124,9 +124,9 @@ impl FileDesc {
         unsafe fn cvt_pwrite64(fd: c_int, buf: *const c_void, count: usize, offset: i64)
             -> io::Result<isize>
         {
-            #[cfg(target_os = "linux")]
+            #[cfg(any(target_os = "linux", target_os = "gnu"))]
             use libc::pwrite64;
-            #[cfg(not(target_os = "linux"))]
+            #[cfg(not(any(target_os = "linux", target_os = "gnu")))]
             use libc::pwrite as pwrite64;
             cvt(pwrite64(fd, buf, count, offset))
         }
@@ -169,7 +169,7 @@ impl FileDesc {
         }
     }
 
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "gnu"))]
     pub fn set_nonblocking(&self, nonblocking: bool) -> io::Result<()> {
         unsafe {
             let v = nonblocking as c_int;
@@ -178,7 +178,7 @@ impl FileDesc {
         }
     }
 
-    #[cfg(not(target_os = "linux"))]
+    #[cfg(not(any(target_os = "linux", target_os = "gnu")))]
     pub fn set_nonblocking(&self, nonblocking: bool) -> io::Result<()> {
         unsafe {
             let previous = cvt(libc::fcntl(self.fd, libc::F_GETFL))?;

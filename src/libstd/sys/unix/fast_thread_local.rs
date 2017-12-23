@@ -20,7 +20,7 @@
 // fallback implementation to use as well.
 //
 // Due to rust-lang/rust#18804, make sure this is not generic!
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "gnu"))]
 pub unsafe fn register_dtor(t: *mut u8, dtor: unsafe extern fn(*mut u8)) {
     use libc;
     use mem;

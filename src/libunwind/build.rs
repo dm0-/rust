@@ -20,6 +20,8 @@ fn main() {
         } else if !target.contains("android") {
             println!("cargo:rustc-link-lib=gcc_s");
         }
+    } else if target.contains("gnu") {
+        println!("cargo:rustc-link-lib=gcc_s");
     } else if target.contains("freebsd") {
         println!("cargo:rustc-link-lib=gcc_s");
     } else if target.contains("rumprun") {

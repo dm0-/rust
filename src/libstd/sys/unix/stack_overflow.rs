@@ -35,6 +35,7 @@ impl Drop for Handler {
 }
 
 #[cfg(any(target_os = "linux",
+          target_os = "gnu",
           target_os = "macos",
           target_os = "bitrig",
           target_os = "dragonfly",
@@ -60,7 +61,7 @@ mod imp {
     // This is initialized in init() and only read from after
     static mut PAGE_SIZE: usize = 0;
 
-    #[cfg(any(target_os = "linux", target_os = "android"))]
+    #[cfg(any(target_os = "linux", target_os = "gnu", target_os = "android"))]
     unsafe fn siginfo_si_addr(info: *mut libc::siginfo_t) -> usize {
         #[repr(C)]
         struct siginfo_t {
@@ -71,7 +72,7 @@ mod imp {
         (*(info as *const siginfo_t)).si_addr as usize
     }
 
-    #[cfg(not(any(target_os = "linux", target_os = "android")))]
+    #[cfg(not(any(target_os = "linux", target_os = "gnu", target_os = "android")))]
     unsafe fn siginfo_si_addr(info: *mut libc::siginfo_t) -> usize {
         (*info).si_addr as usize
     }
@@ -154,6 +155,7 @@ mod imp {
     }
 
     #[cfg(any(target_os = "linux",
+              target_os = "gnu",
               target_os = "macos",
               target_os = "bitrig",
               target_os = "netbsd",
@@ -200,6 +202,7 @@ mod imp {
 }
 
 #[cfg(not(any(target_os = "linux",
+              target_os = "gnu",
               target_os = "macos",
               target_os = "bitrig",
               target_os = "dragonfly",
